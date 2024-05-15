@@ -12,9 +12,7 @@
         .infoPadding{
             padding-top:10px;
         }
-        
-        h5,h6 { font-weight: normal; }
-
+        h5,h6 { font-weight: normal; } 
     </style>
   </head>
   <body>
@@ -25,41 +23,51 @@
                 <hr/>
             </div>
         </div>
-        <div class="row">
-          <form action="" method="post" novalidate>
-            {% csrf_token %}
-            <div class="col-auto">
-              <input type="text" class="form-control" name="task" placeholder="New task...">
-            </div>
-            <div class="col-auto">
-              <button type="submit" class="btn btn-primary mb-3">Add Task</button>
-            </div>
-          </form>
-        </div>
-        <div class="row gy-3 titlePadding">
-            <div class="col titlePadding">
-                <div class="table-responsive-sm">
-                    <table class="table table-bordered">
-                        <thead>
-                          <tr>
-                              <th scope="col"></th>
-                              <th scope="col">Tasks</th>
-                              <th scope="col">Action</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          {% for todo in todos %}
-                          <tr>
-                              <td><input type="checkbox" name="todo_checkbox" value="{{ todo.id }}" {% if todo.status %}checked{% endif %}></td>
-                              <td>{{ todo.content }}</td>
-                              <td></td>
-                          </tr>
-                          {% endfor %}
-                      </tbody>
-                    </table>
-                </div>
-            </div>
+        <div id="todoList">
+          {% for todo in todos %}
+          <ul id="todoUl">
+              <li id="todo-{{ todo.id }}">
+                {% if todo.status %}
+                  <s>{{ todo.content }}</s>
+                  {% else %}
+                    {{ todo.content }}
+                {% endif %}
+              </li>
+              <td></td>
+          </ul>
+          {% endfor %}
         </div>
       </div>
+      <script>
+        const socketURL = `ws://${window.location.host}/ws/todos/`;
+        console.log("Establishing Socket Connection")
+        const socket = new WebSocket(socketURL)
+
+        // Recieve Message from the backend
+        socket.addEventListener("message", (e) => {
+          const data = JSON.parse(e.data);
+          console.log(data);
+          // Check if the todo already exists in the list
+          const existingTodo = document.getElementById(`todo-${data.id}`);
+          if (!existingTodo) {
+            // Add new todo to the list
+            const todoList = document.getElementById("todoList");
+            const newTodo = document.createElement("li");
+            newTodo.textContent = data.content;
+            newTodo.id = `todo-${data.id}`; // Set unique ID for the new todo
+            if (data.status) {
+              newTodo.innerHTML = `<s>${data.content}</s>`;
+            }
+            todoList.appendChild(newTodo);
+          } else {
+            // Update existing todo if it already exists in the list
+            if (data.status) {
+              existingTodo.innerHTML = `<s>${data.content}</s>`;
+            } else {
+              existingTodo.textContent = data.content;
+            }
+          }
+        });
+      </script>
   </body>
 </html>

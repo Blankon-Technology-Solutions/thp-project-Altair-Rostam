@@ -11,6 +11,7 @@ env/
 
 .ruff_cache
 htmlcov
+.coverage
 
 # PostgreSQL related
 .mypgpass
