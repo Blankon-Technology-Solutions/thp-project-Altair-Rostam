@@ -1,4 +1,4 @@
-.PHONY: dev,migrate,makemigrations,showmigrations,createsuperuser,format,inspect,compose
+.PHONY: dev,migrate,makemigrations,showmigrations,createsuperuser,format,fix,inspect,compose
 
 dev:
 	poetry run python manage.py runserver
@@ -10,9 +10,15 @@ showmigrations:
 	poetry run python manage.py showmigrations
 createsuperuser:
 	poetry run python manage.py createsuperuser
-format:
+test:
+	poetry run pytest -v -rs --show-capture=no
+fix:
 	ruff --fix --exit-non-zero-on-fix . || True
+format:
+	ruff format .
+
+CONTAINER_NAME=postgresql
 inspect:
-	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgresql
+	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${CONTAINER_NAME}
 compose:
 	docker-compose up -d
