@@ -6,9 +6,8 @@ from testcontainers.postgres import PostgresContainer
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
-pytest_plugins = (
-    "todo.fixtures",
-)
+pytest_plugins = ("todo.fixtures",)
+
 
 @pytest.fixture(scope="session")
 def postgres_container():

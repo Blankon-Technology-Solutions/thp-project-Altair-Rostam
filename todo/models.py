@@ -8,6 +8,6 @@ class Todo(models.Model):
     status = models.IntegerField(choices=StatusEnum.choices, default=StatusEnum.UNCHECKED)
 
     def __str__(self):
-        return f"{self.user.username} - {self.content}"
+        return f"{self.content} - {self.status}"
 
         # user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="todo_owner", on_delete=CASCADE)

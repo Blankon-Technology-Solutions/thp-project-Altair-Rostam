@@ -4,6 +4,7 @@ from ..models import Todo
 
 API_TODO_URL = "/api/todos/"
 
+
 @pytest.mark.django_db
 def test_todo_list_create(authenticated_api_client):
     # Test creating a Todo

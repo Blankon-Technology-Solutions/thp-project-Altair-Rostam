@@ -26,16 +26,8 @@ indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 case-sensitive = true
-
-# [tool.pytest.ini_options]
-# DJANGO_SETTINGS_MODULE = "core.settings"
-# django_find_project = false
-# python_files = "*_test.py"
-# pythonpath = ["."]
-# testpaths = ["todo"]
-# filterwarnings = "ignore::DeprecationWarning:^(?!node\\.).*:"
 
 [tool.poetry.dependencies]
 python = "^3.12"

@@ -21,12 +21,12 @@
     <div class="container px-4">
         <div class="row gy-3">
             <div class="col titlePadding">
-                <h5>Hi there</h5>
+                <h5>My Todo</h5>
                 <hr/>
             </div>
         </div>
         <div class="row">
-          <form action="" method="post">
+          <form action="" method="post" novalidate>
             {% csrf_token %}
             <div class="col-auto">
               <input type="text" class="form-control" name="task" placeholder="New task...">
@@ -41,22 +41,21 @@
                 <div class="table-responsive-sm">
                     <table class="table table-bordered">
                         <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col">Tasks</th>
-                                <th scope="col">Timestamp</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                          <tr>
+                              <th scope="col"></th>
+                              <th scope="col">Tasks</th>
+                              <th scope="col">Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
                           {% for todo in todos %}
                           <tr>
-                              <td>{{todo.content}}</td>
-                              <td>{{todo.timestamp}}</td>
-                              <td>{{todo.status}}</td>
+                              <td><input type="checkbox" name="todo_checkbox" value="{{ todo.id }}" {% if todo.status %}checked{% endif %}></td>
+                              <td>{{ todo.content }}</td>
+                              <td></td>
                           </tr>
                           {% endfor %}
-                        </tbody>
+                      </tbody>
                     </table>
                 </div>
             </div>
