@@ -12,6 +12,10 @@ createsuperuser:
 	poetry run python manage.py createsuperuser
 test:
 	poetry run pytest -v -rs --show-capture=no
+coverage:
+	poetry run pytest --cov=.
+report:
+	poetry run pytest --cov=. --cov-report html
 fix:
 	ruff --fix --exit-non-zero-on-fix . || True
 format:

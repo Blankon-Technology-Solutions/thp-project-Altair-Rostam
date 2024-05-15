@@ -10,6 +10,8 @@ __pycache__/*
 env/
 
 .ruff_cache
+htmlcov
+
 # PostgreSQL related
 .mypgpass
 .pgservice.conf
