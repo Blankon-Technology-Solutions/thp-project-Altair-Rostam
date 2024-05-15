@@ -24,6 +24,11 @@ DB_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
 DB_HOST = os.environ.get("POSTGRES_HOST", "localhost")
 DB_PORT = os.environ.get("POSTGRES_PORT", "5432")
 
+LINKEDIN_CLIENT_ID = os.environ.get("LINKEDIN_CLIENT_ID")
+LINKEDIN_CLIENT_SECRET = os.environ.get("LINKEDIN_CLIENT_SECRET")
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,7 +48,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "daphne",
+    # "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -52,8 +57,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "pytest",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.openid_connect",
     "todo",
-    "channels",
+    # "channels",
 ]
 
 MIDDLEWARE = [
@@ -64,6 +74,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -151,6 +162,35 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.BrowsableAPIRenderer",
     ],
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+}
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    "openid_connect": {
+        "APPS": [
+            {
+                "provider_id": "linkedin",
+                "name": "LinkedIn",
+                "client_id": LINKEDIN_CLIENT_ID,
+                "secret": LINKEDIN_CLIENT_SECRET,
+                "settings": {
+                    "server_url": "https://www.linkedin.com/oauth",
+                },
+            },
+            {
+                "provider_id": "google",
+                "name": "Google",
+                "client_id": GOOGLE_CLIENT_ID,
+                "secret": GOOGLE_CLIENT_SECRET,
+                "settings": {
+                    "server_url": "https://accounts.google.com",
+                },
+            },
+        ]
+    }
 }
 
 CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}

@@ -452,6 +452,26 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-allauth"
+version = "0.63.0"
+description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django-allauth-0.63.0.tar.gz", hash = "sha256:fbe0148c6258eac44e701a8f36e0950b5d0b1c60bde3e178683a4239f49311fc"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+
+[package.extras]
+mfa = ["qrcode (>=7.0.0)"]
+openid = ["python3-openid (>=3.0.8)"]
+saml = ["python3-saml (>=1.15.0,<2.0.0)"]
+socialaccount = ["pyjwt[crypto] (>=1.7)", "requests (>=2.0.0)", "requests-oauthlib (>=0.3.0)"]
+steam = ["python3-openid (>=3.0.8)"]
+
+[[package]]
 name = "django-filter"
 version = "24.2"
 description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically."
@@ -1285,4 +1305,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "44d5ee45e7953de8bc34ea6058bf4c274c4654cfc0411e0209fce11870b7203c"
+content-hash = "f0d3d5c35f4936ad875115cc9b3e12edecc0fb53e17471453464fa7558b59359"

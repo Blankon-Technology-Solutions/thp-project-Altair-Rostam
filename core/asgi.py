@@ -7,5 +7,6 @@ from todo.routing import wsPattern
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
-http_response_app = get_asgi_application()
-application = ProtocolTypeRouter({"http": http_response_app, "websocket": URLRouter(wsPattern)})
+application = ProtocolTypeRouter(
+    {"http": get_asgi_application(), "websocket": URLRouter(wsPattern)}
+)
