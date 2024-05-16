@@ -11,7 +11,7 @@ showmigrations:
 createsuperuser:
 	poetry run python manage.py createsuperuser
 test:
-	poetry run pytest -v -rs --show-capture=no
+	poetry run pytest -s -vv --show-capture=no
 coverage:
 	poetry run pytest --cov=.
 report:

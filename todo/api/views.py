@@ -12,9 +12,12 @@ class TodoListCreate(generics.ListCreateAPIView):
     queryset = Todo.objects.all()
     serializer_class = TodoListSerializer
 
+    def get_queryset(self):
+        return Todo.objects.filter(user=self.request.user)
+
     def perform_create(self, serializer):
         # Trigger websocket event when a new todo is created
-        instance = serializer.save()
+        instance = serializer.save(user=self.request.user)
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             "todo_updates", {"type": "update_todos", "data": TodoListSerializer(instance).data}
@@ -25,6 +28,9 @@ class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Todo.objects.all()
     serializer_class = TodoDetailSerializer
+
+    def get_queryset(self):
+        return Todo.objects.filter(user=self.request.user)
 
     def perform_update(self, serializer):
         # Trigger websocket event when a todo is updated

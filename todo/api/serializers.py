@@ -12,7 +12,10 @@ class TodoListSerializer(serializers.ModelSerializer):
         """
         Create a new Todo instance.
         """
-        return Todo.objects.create(content=validated_data["content"])
+        user = self.context["request"].user
+        todo = Todo.objects.create(content=validated_data["content"], user=user)
+
+        return todo
 
 
 class TodoDetailSerializer(serializers.ModelSerializer):

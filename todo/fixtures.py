@@ -7,18 +7,18 @@ from .models import Todo
 
 
 @pytest.fixture
-def authenticated_api_client():
-    # Create a user for authentication
-    user = User.objects.create(username="testuser")
-    # Create an authenticated client
-    client = APIClient()
-    client.force_authenticate(user=user)
-    yield client
-    # Clean up after the test
-    client.force_authenticate(user=None)
+def authenticated_user():
+    user = User.objects.create_user(username="testuser", password="testpassword")
+    yield user
     user.delete()
 
+@pytest.fixture
+def authenticated_api_client(authenticated_user):
+    client = APIClient()
+    client.force_authenticate(user=authenticated_user)
+    yield client
+    client.force_authenticate(user=None)
 
 @pytest.fixture
-def todo_baker(postgres_container):
-    return baker.make(Todo)
+def todo_baker(authenticated_user):
+    return baker.make(Todo, user=authenticated_user, _quantity=5)
