@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>ToDo</title>
+    <style>
+        .titlePadding{
+            padding-top:20px;
+        }
+        .infoPadding{
+            padding-top:10px;
+        }
+        h5,h6 { font-weight: normal; } 
+    </style>
+  </head>
+  <body>
+    <div class="container px-4">
+        <div class="row gy-3">
+          <div class="col titlePadding" style="display: flex; justify-content: space-between;">
+                <h5>{{user}}'s To-Do List</h5>
+                <a href="/accounts/profile/"><h6>Go Back</h6></a>
+                <a href="{% url 'account_logout'%}"><h6>Log Out</h6></a>
+          </div>
+          <hr/>
+        </div>
+        <div class="row gy-3">
+         
+        </div>
+        <div id="todoList">
+          {% for todo in todos %}
+          <ul id="todoUl">
+              <li id="todo-{{ todo.id }}">
+                {% if todo.status %}
+                  <s>{{ todo.content }}</s>
+                  {% else %}
+                    {{ todo.content }}
+                {% endif %}
+              </li>
+              <td></td>
+          </ul>
+          {% endfor %}
+        </div>
+      </div>
+      <script>
+        const socketURL = `ws://${window.location.host}/ws/todos/`;
+        console.log("Establishing Socket Connection")
+        const socket = new WebSocket(socketURL)
+
+        // Recieve Message from the backend
+        socket.addEventListener("message", (e) => {
+          const data = JSON.parse(e.data);
+          console.log(data);
+          // Check if the todo already exists in the list
+          const existingTodo = document.getElementById(`todo-${data.id}`);
+          if (!existingTodo) {
+            // Add new todo to the list
+            const todoList = document.getElementById("todoList");
+            const newTodo = document.createElement("li");
+            newTodo.textContent = data.content;
+            newTodo.id = `todo-${data.id}`; // Set unique ID for the new todo
+            if (data.status) {
+              newTodo.innerHTML = `<s>${data.content}</s>`;
+            }
+            todoList.appendChild(newTodo);
+          } else {
+            // Update existing todo if it already exists in the list
+            if (data.status) {
+              existingTodo.innerHTML = `<s>${data.content}</s>`;
+            } else {
+              existingTodo.textContent = data.content;
+            }
+          }
+        });
+      </script>
+  </body>
+</html>

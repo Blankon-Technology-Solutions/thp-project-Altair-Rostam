@@ -1,0 +1,20 @@
+# Byte-compiled / optimized / DLL files
+__pycache__
+__pycache__/*
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.env.*
+env/
+
+.ruff_cache
+htmlcov
+.coverage
+.pytest_cache
+
+# PostgreSQL related
+.mypgpass
+.pgservice.conf
+data/
