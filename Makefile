@@ -26,3 +26,6 @@ inspect:
 	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${CONTAINER_NAME}
 compose:
 	docker-compose up -d
+run:
+	docker-compose build
+	docker-compose up -d

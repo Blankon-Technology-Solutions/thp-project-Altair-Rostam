@@ -12,12 +12,14 @@ def authenticated_user():
     yield user
     user.delete()
 
+
 @pytest.fixture
 def authenticated_api_client(authenticated_user):
     client = APIClient()
     client.force_authenticate(user=authenticated_user)
     yield client
     client.force_authenticate(user=None)
+
 
 @pytest.fixture
 def todo_baker(authenticated_user):

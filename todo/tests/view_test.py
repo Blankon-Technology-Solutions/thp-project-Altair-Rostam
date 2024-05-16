@@ -17,11 +17,13 @@ def test_unauthenticated_todo_view(client):
     assert response.status_code == 302
     assert response.url.startswith("/accounts/login/")
 
+
 @pytest.mark.django_db
 def test_authenticated_profile_view(authenticated_user, client):
     client.force_login(authenticated_user)
     response = client.get("/accounts/profile/")
     assert response.status_code == 200
+
 
 @pytest.mark.django_db
 def test_unauthenticated_profile_view(client):
@@ -30,4 +32,3 @@ def test_unauthenticated_profile_view(client):
 
     assert response.status_code == 302
     assert response.url.startswith("/accounts/login/")
-

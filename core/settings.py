@@ -18,6 +18,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+PROD = os.getenv("PROD")
+SHOULD_DEBUG = os.getenv("DEBUG")
+
 DB_NAME = os.environ.get("POSTGRES_DB")
 DB_USER = os.environ.get("POSTGRES_USER")
 DB_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
@@ -40,7 +43,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-*g^%4k0wdu1wagzrj*7no@49mm%k(!fkn1h!kj=17mw8@u)@$n"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = SHOULD_DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -107,7 +110,7 @@ DATABASES = {
         "NAME": DB_NAME,
         "USER": DB_USER,
         "PASSWORD": DB_PASSWORD,
-        "HOST": DB_HOST,
+        "HOST": "postgresql" if PROD else DB_HOST,
         "PORT": DB_PORT,
     }
 }
