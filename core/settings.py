@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-PROD = os.getenv("PROD")
+PROD = os.getenv("PROD") == "True"
 SHOULD_DEBUG = os.getenv("DEBUG")
 
 DB_NAME = os.environ.get("POSTGRES_DB")
@@ -104,13 +104,15 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+DB_HOST = "postgresql" if PROD else DB_HOST
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": DB_NAME,
         "USER": DB_USER,
         "PASSWORD": DB_PASSWORD,
-        "HOST": "postgresql" if PROD else DB_HOST,
+        "HOST": DB_HOST,
         "PORT": DB_PORT,
     }
 }

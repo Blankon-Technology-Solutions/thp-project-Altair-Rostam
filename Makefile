@@ -1,7 +1,10 @@
-.PHONY: dev,migrate,makemigrations,showmigrations,createsuperuser,format,fix,inspect,compose
+.PHONY: dev,dev-compose,migrate,makemigrations,showmigrations,createsuperuser,format,test,cov,cov-report,fix,format,ff,inspect,run
 
 dev:
+	docker-compose -f docker-compose.dev.yml up -d
 	poetry run python manage.py runserver
+dev-compose:
+	docker-compose -f docker-compose.dev.yml up -d
 migrate:
 	poetry run python manage.py migrate
 makemigrations:
@@ -12,20 +15,22 @@ createsuperuser:
 	poetry run python manage.py createsuperuser
 test:
 	poetry run pytest -s -vv --show-capture=no
-coverage:
+cov:
 	poetry run pytest --cov=.
-report:
-	poetry run pytest --cov=. --cov-report html
+cov-report:
+	poetry run pytest --cov=. --cov-report=json
 fix:
 	ruff --fix --exit-non-zero-on-fix . || True
 format:
 	ruff format .
+ff:
+	ruff --fix --exit-non-zero-on-fix . || True
+	ruff format .
 
-CONTAINER_NAME=postgresql
+
+CONTAINER_NAME=postgresql-dev
 inspect:
 	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${CONTAINER_NAME}
-compose:
-	docker-compose up -d
 run:
 	docker-compose build
 	docker-compose up -d
